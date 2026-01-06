@@ -22,7 +22,7 @@ export const config = {
   },
   
   // Quote truncation
-  maxQuoteLength: 120,        // Maximum characters for 3-line display
+  maxQuoteLength: 100,        // Maximum characters for 3-line display
   
   // Location settings
   location: {
