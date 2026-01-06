@@ -429,9 +429,12 @@ async function updateQuote() {
   quoteElement.style.opacity = '0';
   authorElement.style.opacity = '0';
   
-  setTimeout(() => {
+  setTimeout(async () => {
     if (!matchedQuote) {
-      // No quote found for this time
+      // No quote found for this time - get current time for display
+      const { hours, minutes } = await getCurrentTime();
+      const timeString = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+      
       quoteElement.innerHTML = `"${config.messages.noQuote} <strong>${timeString}</strong>..."`;
       authorElement.textContent = config.messages.noSource;
       console.warn('No quote found for current time:', timeString);
