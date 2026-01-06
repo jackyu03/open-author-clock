@@ -7,7 +7,7 @@
   --color-link-hover: rgba(224, 224, 224, 0.5);
   
   /* Typography */
-  --font-family-serif: 'DM Serif Display', serif;
+  --font-family-serif: "DM Serif Display", "Times New Roman", Georgia, serif;
   --font-size-base: 5.5vw;
   --font-size-author: calc(var(--font-size-base) * 0.45);
   --font-weight-normal: 400;
@@ -32,12 +32,15 @@
   box-sizing: border-box;
 }
 
+/* Force font loading */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
+
 html,
 body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: var(--font-family-serif);
+  font-family: "DM Serif Display", "Times New Roman", Georgia, serif !important;
   background-color: var(--color-background);
   color: var(--color-text);
   overflow: hidden;
