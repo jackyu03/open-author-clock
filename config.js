@@ -16,13 +16,13 @@ export const config = {
     base: 5.5,                // Base font size in vw
     portraitMultiplier: 1.5,  // Multiplier for portrait orientation
     shortQuoteThreshold: 100, // Character count for "short" quotes
-    longQuoteThreshold: 300,  // Character count for "long" quotes
+    longQuoteThreshold: 250,  // Character count for "long" quotes
     shortQuoteSize: 7,        // Font size for short quotes (vw)
     longQuoteSize: 4          // Font size for long quotes (vw)
   },
   
   // Quote truncation
-  maxQuoteLength: 100,        // Maximum characters for 3-line display
+  maxQuoteLength: 120,        // Maximum characters for 3-line display
   
   // Location settings
   location: {
@@ -47,7 +47,7 @@ export const config = {
   
   // Error messages
   messages: {
-    noQuote: 'No literary quote found for',
+    noQuote: 'No quote found for',
     noSource: 'No source available',
     timeUnavailable: 'Time unavailable',
     weatherUnavailable: 'Weather unavailable',
