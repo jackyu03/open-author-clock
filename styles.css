@@ -90,6 +90,7 @@ body {
 #quote {
   font-size: clamp(2rem, var(--font-size-base), 8rem);
   font-weight: var(--font-weight-normal);
+  font-family: var(--font-family-serif);
   line-height: 1.4;
   text-align: center;
   max-height: var(--quote-max-height);
@@ -119,6 +120,7 @@ body {
   bottom: var(--spacing-bottom);
   font-size: var(--font-size-author);
   font-weight: var(--font-weight-normal);
+  font-family: var(--font-family-serif);
   text-align: right;
   opacity: 1;
   transition: opacity var(--transition-duration) var(--transition-timing);
