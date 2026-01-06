@@ -53,6 +53,37 @@ body {
   width: 100%;
   padding: 2rem;
   position: relative;
+  z-index: 1;
+}
+
+/* Compact datetime display */
+.datetime-display {
+  position: fixed;
+  bottom: var(--spacing-bottom);
+  left: var(--spacing-small);
+  font-size: var(--font-size-author);
+  font-weight: var(--font-weight-normal);
+  font-family: var(--font-family-serif);
+  color: var(--color-text);
+  opacity: 1;
+  transition: opacity var(--transition-duration) var(--transition-timing);
+  padding: 0.5rem;
+  z-index: 2;
+}
+
+/* Weather display */
+.weather-display {
+  position: fixed;
+  top: var(--spacing-small);
+  left: var(--spacing-small);
+  font-size: var(--font-size-author);
+  font-weight: var(--font-weight-normal);
+  font-family: var(--font-family-serif);
+  color: var(--color-text);
+  opacity: 1;
+  transition: opacity var(--transition-duration) var(--transition-timing);
+  padding: 0.5rem;
+  z-index: 2;
 }
 
 /* Quote text */
@@ -66,10 +97,18 @@ body {
   opacity: 1;
   transition: opacity var(--transition-duration) var(--transition-timing);
   padding: 0 1rem;
+  position: relative;
+  z-index: 2;
+  color: rgba(224, 224, 224, 0.4);
+  orphans: 2;
+  widows: 2;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 #quote strong {
   font-weight: var(--font-weight-bold);
+  color: #ffffff;
 }
 
 /* Author attribution */
@@ -83,6 +122,7 @@ body {
   opacity: 1;
   transition: opacity var(--transition-duration) var(--transition-timing);
   padding: 0.5rem;
+  z-index: 2;
 }
 
 /* GitHub link */

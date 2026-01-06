@@ -3,14 +3,15 @@ export const config = {
   // Data source
   dataUrl: 'data.json',
   
-  // Update interval in milliseconds (60000 = 1 minute)
-  updateInterval: 60000,
+  // Update intervals (milliseconds)
+  updateInterval: 60000,        // Quote updates (1 minute)
+  weatherUpdateInterval: 600000, // Weather updates (10 minutes)
   
   // Transition settings
   fadeOutDuration: 1000,  // milliseconds
   fadeInDuration: 1000,   // milliseconds
   
-  // Font size adjustment
+  // Typography settings
   fontSize: {
     base: 5.5,                // Base font size in vw
     portraitMultiplier: 1.5,  // Multiplier for portrait orientation
@@ -20,17 +21,46 @@ export const config = {
     longQuoteSize: 4          // Font size for long quotes (vw)
   },
   
+  // Quote truncation
+  maxQuoteLength: 120,        // Maximum characters for 3-line display
+  
+  // Location settings
+  location: {
+    city: 'Evanston',
+    state: 'IL',
+    latitude: 42.0451,
+    longitude: -87.6877,
+    timezone: 'America/Chicago'
+  },
+  
+  // Time settings
+  timeSync: {
+    useWebTime: false,          // Default to system time
+    maxDiscrepancySeconds: 30,  // Switch to web time if system differs by more than this
+    webTimeAPI: 'https://worldtimeapi.org/api/timezone/America/Chicago',
+    fallbackToSystemTime: true  // Use system time if web time fails
+  },
+  
   // Screen wake lock settings
   enableWakeLock: true,
   wakeLockFallbackInterval: 30000, // milliseconds
   
-  // UTC timezone detection
-  utcTimezonesOffset: -7, // Hours to adjust for UTC timezones
+  // Error messages
+  messages: {
+    noQuote: 'No literary quote found for',
+    noSource: 'No source available',
+    timeUnavailable: 'Time unavailable',
+    weatherUnavailable: 'Weather unavailable',
+    loadingQuote: 'Loading quote...',
+    loadingWeather: 'Loading weather...'
+  },
   
   // Selectors
   selectors: {
     quote: '#quote',
     author: '#author',
-    quoteContainer: '#quoteContainer'
+    quoteContainer: '#quoteContainer',
+    datetimeDisplay: '#datetimeDisplay',
+    weatherDisplay: '#weatherDisplay'
   }
 };
