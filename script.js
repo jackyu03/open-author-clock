@@ -186,7 +186,7 @@ function displayError(message) {
   const container = document.querySelector(config.selectors.quoteContainer);
   if (container) {
     container.innerHTML = `
-      <div style="text-align: center; color: #ff0000; padding: 2rem;">
+      <div style="text-align: center; color: #ff6b6b; padding: 2rem;">
         <h2>Error</h2>
         <p>${message}</p>
       </div>
@@ -244,9 +244,10 @@ function applyEReaderStyles() {
   const isEReader = /\b(Kindle|NOOK|Kobo|Sony Reader)\b/i.test(navigator.userAgent);
   
   if (isEReader) {
-    document.body.style.backgroundColor = '#ffffff';
-    document.body.style.color = '#000000';
-    console.log('E-reader styles applied');
+    // Keep dark theme consistent across all devices
+    document.body.style.backgroundColor = '#1a1a1a';
+    document.body.style.color = '#e0e0e0';
+    console.log('E-reader dark styles applied');
   }
 }
 

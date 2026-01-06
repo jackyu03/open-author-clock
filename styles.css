@@ -1,10 +1,10 @@
 /* CSS Custom Properties (Variables) */
 :root {
-  /* Colors */
-  --color-background: #fff;
-  --color-text: #000;
-  --color-link: #000;
-  --color-link-hover: rgba(0, 0, 0, 0.5);
+  /* Colors - Dark theme as default */
+  --color-background: #1a1a1a;
+  --color-text: #e0e0e0;
+  --color-link: #e0e0e0;
+  --color-link-hover: rgba(224, 224, 224, 0.5);
   
   /* Typography */
   --font-family-serif: 'Tinos', Georgia, serif;
@@ -139,8 +139,8 @@ body {
 /* Print styles */
 @media print {
   body {
-    background-color: white;
-    color: black;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
   }
   
   .github-link {
@@ -164,8 +164,18 @@ body {
   }
 }
 
-/* Dark mode support */
+/* Dark mode support - keeping dark theme consistent */
 @media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #1a1a1a;
+    --color-text: #e0e0e0;
+    --color-link: #e0e0e0;
+    --color-link-hover: rgba(224, 224, 224, 0.5);
+  }
+}
+
+/* Light mode override - force dark theme */
+@media (prefers-color-scheme: light) {
   :root {
     --color-background: #1a1a1a;
     --color-text: #e0e0e0;
@@ -184,16 +194,16 @@ body {
 }
 
 #quote::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(224, 224, 224, 0.2);
   border-radius: 4px;
 }
 
 #quote::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(224, 224, 224, 0.3);
 }
 
 /* Firefox scrollbar */
 #quote {
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+  scrollbar-color: rgba(224, 224, 224, 0.2) transparent;
 }
