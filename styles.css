@@ -10,6 +10,7 @@
   --font-family-serif: "DM Serif Display", "Times New Roman", Georgia, serif;
   --font-size-base: 5.5vw;
   --font-size-author: calc(var(--font-size-base) * 0.45);
+  --font-size-weather: calc(var(--font-size-author) * 1.3);
   --font-weight-normal: 400;
   --font-weight-bold: 400;
   
@@ -79,7 +80,7 @@ body {
   position: fixed;
   top: var(--spacing-small);
   left: var(--spacing-small);
-  font-size: calc(var(--font-size-author) * 1.3);
+  font-size: var(--font-size-weather);
   font-weight: var(--font-weight-normal);
   font-family: var(--font-family-serif);
   color: var(--color-text);

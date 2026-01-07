@@ -18,7 +18,8 @@ export const config = {
     shortQuoteThreshold: 80, // Character count for "short" quotes
     longQuoteThreshold: 250,  // Character count for "long" quotes
     shortQuoteSize: 7,        // Font size for short quotes (vw)
-    longQuoteSize: 4          // Font size for long quotes (vw)
+    longQuoteSize: 4,         // Font size for long quotes (vw)
+    weatherMultiplier: 1.3    // Weather text size multiplier (relative to author size)
   },
   
   // Quote truncation
