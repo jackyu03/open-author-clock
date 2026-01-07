@@ -5,6 +5,15 @@ let quotes = [];
 let wakeLock = null;
 
 /**
+ * Apply text alignment from config
+ */
+function applyTextAlignment() {
+  const root = document.documentElement;
+  root.style.setProperty('--text-align', config.textAlign);
+  console.log('Text alignment set to:', config.textAlign);
+}
+
+/**
  * Setup precise minute timing
  */
 async function setupPreciseMinuteTiming() {
@@ -31,6 +40,9 @@ async function init() {
     setupWakeLock();
     setupFallbackKeepAwake();
     applyEReaderStyles();
+    
+    // Apply text alignment from config
+    applyTextAlignment();
     
     // Initialize datetime display immediately
     console.log('Initializing datetime display...');

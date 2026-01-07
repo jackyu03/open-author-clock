@@ -22,6 +22,9 @@ export const config = {
     weatherMultiplier: 1.3    // Weather text size multiplier (relative to author size)
   },
   
+  // Text alignment
+  textAlign: 'left',        // Options: 'left', 'center', 'right'
+  
   // Quote truncation
   maxQuoteLength: 108,        // Maximum characters for 3-line display
   
