@@ -13,11 +13,11 @@ export const config = {
   
   // Typography settings
   fontSize: {
-    base: 5.5,                // Base font size in vw
+    base: 6.5,                // Base font size in vw
     portraitMultiplier: 1.5,  // Multiplier for portrait orientation
-    shortQuoteThreshold: 80, // Character count for "short" quotes
+    shortQuoteThreshold: 70, // Character count for "short" quotes
     longQuoteThreshold: 250,  // Character count for "long" quotes
-    shortQuoteSize: 7,        // Font size for short quotes (vw)
+    shortQuoteSize: 8,        // Font size for short quotes (vw)
     longQuoteSize: 4,         // Font size for long quotes (vw)
     weatherMultiplier: 1.3    // Weather text size multiplier (relative to author size)
   },
