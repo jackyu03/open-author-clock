@@ -18,12 +18,12 @@ function applyTextAlignment() {
  */
 async function setupPreciseMinuteTiming() {
   const { seconds } = await getCurrentTime();
-  
+
   // Calculate milliseconds until next minute
   const msUntilNextMinute = (60 - seconds) * 1000;
-  
+
   console.log(`Syncing to next minute in ${60 - seconds} seconds`);
-  
+
   // Wait until the next minute, then start regular interval
   setTimeout(() => {
     updateQuote(); // Update immediately at minute change
@@ -40,24 +40,24 @@ async function init() {
     setupWakeLock();
     setupFallbackKeepAwake();
     applyEReaderStyles();
-    
+
     // Apply text alignment from config
     applyTextAlignment();
-    
+
     // Initialize datetime display immediately
     console.log('Initializing datetime display...');
     await updateDateTimeDisplay();
     console.log('Datetime display initialized');
-    
+
     // Initialize weather display
     updateWeatherDisplay();
-    
+
     // Initial quote update
     await updateQuote();
-    
+
     // Setup precise minute timing for updates
     setupPreciseMinuteTiming();
-    
+
     // Update weather every configured interval
     setInterval(updateWeatherDisplay, config.weatherUpdateInterval);
   } catch (error) {
@@ -97,7 +97,7 @@ function convertTimeToMinutes(timeString) {
 async function getCurrentTime() {
   try {
     console.log('Getting current time...');
-    
+
     // Get system time first
     const systemTime = new Date();
     const systemTimeData = {
@@ -105,47 +105,47 @@ async function getCurrentTime() {
       minutes: systemTime.getMinutes(),
       seconds: systemTime.getSeconds()
     };
-    
+
     console.log('System time:', systemTimeData);
-    
+
     // If web time is disabled, just use system time
     if (!config.timeSync.useWebTime) {
       console.log('Using system time (web time disabled)');
       return systemTimeData;
     }
-    
+
     console.log('Fetching web time...');
     // Try to get web time
     const response = await fetch(config.timeSync.webTimeAPI);
     const data = await response.json();
     const webTime = new Date(data.datetime);
-    
+
     const webTimeData = {
       hours: webTime.getHours(),
       minutes: webTime.getMinutes(),
       seconds: webTime.getSeconds()
     };
-    
+
     console.log('Web time:', webTimeData);
-    
+
     // Check discrepancy between system and web time
     const systemMinutes = systemTime.getHours() * 60 + systemTime.getMinutes();
     const webMinutes = webTime.getHours() * 60 + webTime.getMinutes();
     const discrepancyMinutes = Math.abs(systemMinutes - webMinutes);
-    
+
     // If discrepancy is large, use web time
     if (discrepancyMinutes * 60 > config.timeSync.maxDiscrepancySeconds) {
       console.log(`Time discrepancy detected: ${discrepancyMinutes} minutes. Using web time.`);
       return webTimeData;
     }
-    
+
     // Otherwise use system time
     console.log('Using system time (no significant discrepancy)');
     return systemTimeData;
-    
+
   } catch (error) {
     console.error('Failed to fetch web time:', error);
-    
+
     if (config.timeSync.fallbackToSystemTime) {
       console.log('Falling back to system time');
       const systemTime = new Date();
@@ -155,7 +155,7 @@ async function getCurrentTime() {
         seconds: systemTime.getSeconds()
       };
     }
-    
+
     throw new Error('Time unavailable');
   }
 }
@@ -174,10 +174,10 @@ function isDeviceTimeUTC() {
 async function findQuoteForCurrentTime() {
   const { hours, minutes } = await getCurrentTime();
   const currentTimeString = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-  
+
   // Try to find exact match only
   let matchedQuote = quotes.find(q => q.time === currentTimeString);
-  
+
   return matchedQuote;
 }
 
@@ -187,21 +187,20 @@ async function findQuoteForCurrentTime() {
 function adjustFontSizeForQuote(quoteLength) {
   const quoteElement = document.querySelector(config.selectors.quote);
   if (!quoteElement) return;
-  
+
   const isPortrait = window.innerHeight > window.innerWidth;
-  const baseSize = isPortrait 
-    ? config.fontSize.base * config.fontSize.portraitMultiplier 
-    : config.fontSize.base;
-  
+  const portraitMultiplier = isPortrait ? config.fontSize.portraitMultiplier : 1;
+  const baseSize = config.fontSize.base * portraitMultiplier;
+
   let fontSize;
   if (quoteLength < config.fontSize.shortQuoteThreshold) {
-    fontSize = config.fontSize.shortQuoteSize;
+    fontSize = config.fontSize.shortQuoteSize * portraitMultiplier;
   } else if (quoteLength > config.fontSize.longQuoteThreshold) {
-    fontSize = config.fontSize.longQuoteSize;
+    fontSize = config.fontSize.longQuoteSize * portraitMultiplier;
   } else {
     fontSize = baseSize;
   }
-  
+
   quoteElement.style.fontSize = `${fontSize}vw`;
 }
 
@@ -211,7 +210,7 @@ function adjustFontSizeForQuote(quoteLength) {
 function truncateQuoteToThreeLines(quoteText, timeString) {
   const quoteElement = document.querySelector(config.selectors.quote);
   if (!quoteElement) return quoteText;
-  
+
   // Create a temporary element to measure text height
   const tempElement = document.createElement('div');
   tempElement.style.cssText = window.getComputedStyle(quoteElement).cssText;
@@ -221,36 +220,36 @@ function truncateQuoteToThreeLines(quoteText, timeString) {
   tempElement.style.maxHeight = 'none';
   tempElement.style.width = quoteElement.offsetWidth + 'px';
   document.body.appendChild(tempElement);
-  
+
   // Get line height
   tempElement.innerHTML = 'Test line';
   const lineHeight = tempElement.offsetHeight;
   const maxHeight = lineHeight * 3;
-  
+
   // Test full quote
   const highlightedQuote = highlightTimeString(quoteText, timeString);
   tempElement.innerHTML = `"${highlightedQuote}"`;
-  
+
   if (tempElement.offsetHeight <= maxHeight) {
     document.body.removeChild(tempElement);
     return quoteText;
   }
-  
+
   // Truncate word by word until it fits
   const words = quoteText.split(' ');
   let truncatedText = '';
-  
+
   for (let i = 0; i < words.length; i++) {
     const testText = truncatedText + (truncatedText ? ' ' : '') + words[i];
     const testHighlighted = highlightTimeString(testText + '...', timeString);
     tempElement.innerHTML = `"${testHighlighted}"`;
-    
+
     if (tempElement.offsetHeight > maxHeight) {
       break;
     }
     truncatedText = testText;
   }
-  
+
   document.body.removeChild(tempElement);
   return truncatedText + '...';
 }
@@ -260,27 +259,27 @@ function truncateQuoteToThreeLines(quoteText, timeString) {
 async function updateWeatherDisplay() {
   const weatherElement = document.querySelector(config.selectors.weatherDisplay);
   if (!weatherElement) return;
-  
+
   try {
     // Show loading state
     weatherElement.textContent = `${config.location.city} • ${config.messages.loadingWeather}`;
-    
+
     // Using Open-Meteo API with weather conditions
     const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${config.location.latitude}&longitude=${config.location.longitude}&current_weather=true&temperature_unit=celsius`);
-    
+
     if (!response.ok) {
       throw new Error(`Weather API responded with status: ${response.status}`);
     }
-    
+
     const data = await response.json();
-    
+
     if (data.current_weather) {
       const temp = Math.round(data.current_weather.temperature);
       const weatherCode = data.current_weather.weathercode;
-      
+
       // Convert weather code to condition
       const condition = getWeatherCondition(weatherCode);
-      
+
       weatherElement.textContent = `${config.location.city} • ${temp}°C • ${condition}`;
     } else {
       throw new Error('No weather data received');
@@ -321,7 +320,7 @@ function getWeatherCondition(code) {
     96: 'Thunderstorm with Hail',
     99: 'Heavy Thunderstorm'
   };
-  
+
   return conditions[code] || 'Unknown';
 }
 /**
@@ -330,21 +329,21 @@ function getWeatherCondition(code) {
 async function updateDateTimeDisplay() {
   const datetimeElement = document.querySelector(config.selectors.datetimeDisplay);
   if (!datetimeElement) return;
-  
+
   try {
     const { hours, minutes } = await getCurrentTime();
     const now = new Date();
-    
+
     // Format date: "Mon, Jan 6"
-    const dateStr = now.toLocaleDateString('en-US', { 
-      weekday: 'short', 
-      month: 'short', 
-      day: 'numeric' 
+    const dateStr = now.toLocaleDateString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric'
     });
-    
+
     // Format time: "12:55"
     const timeStr = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-    
+
     // Combine in single line: "Mon, Jan 6 • 12:55"
     datetimeElement.textContent = `${dateStr} • ${timeStr}`;
   } catch (error) {
@@ -354,42 +353,43 @@ async function updateDateTimeDisplay() {
 }
 function smartTruncateQuote(quoteText, timeString) {
   // Rough estimate: ~120 characters per 3 lines at typical font sizes
-  const maxLength = 120;
-  
+  // Rough estimate: ~120 characters per 3 lines at typical font sizes
+  const maxLength = config.maxQuoteLength;
+
   if (quoteText.length <= maxLength) {
     return quoteText;
   }
-  
+
   // Find the time string position
   const timeIndex = quoteText.toLowerCase().indexOf(timeString.toLowerCase());
   if (timeIndex === -1) {
     // Time not found, just truncate from beginning
     return quoteText.substring(0, maxLength - 3) + '...';
   }
-  
+
   const timeLength = timeString.length;
   const timeEnd = timeIndex + timeLength;
-  
+
   // Calculate ideal window to use full 120 characters
   let startIndex = Math.max(0, timeIndex - Math.floor((maxLength - timeLength) / 2));
   let endIndex = Math.min(quoteText.length, startIndex + maxLength);
-  
+
   // If we hit the end, shift the window back to use full length
   if (endIndex === quoteText.length && quoteText.length > maxLength) {
     startIndex = Math.max(0, quoteText.length - maxLength);
     endIndex = quoteText.length;
   }
-  
+
   // If we hit the beginning, shift the window forward to use full length
   if (startIndex === 0 && quoteText.length > maxLength) {
     endIndex = Math.min(quoteText.length, maxLength);
   }
-  
+
   // Ensure we don't exceed maxLength
   if (endIndex - startIndex > maxLength) {
     endIndex = startIndex + maxLength;
   }
-  
+
   // Find word boundaries to avoid cutting words
   if (startIndex > 0) {
     const spaceIndex = quoteText.indexOf(' ', startIndex);
@@ -397,19 +397,19 @@ function smartTruncateQuote(quoteText, timeString) {
       startIndex = spaceIndex + 1;
     }
   }
-  
+
   if (endIndex < quoteText.length) {
     const spaceIndex = quoteText.lastIndexOf(' ', endIndex);
     if (spaceIndex !== -1 && spaceIndex > endIndex - 15) {
       endIndex = spaceIndex;
     }
   }
-  
+
   let result = quoteText.substring(startIndex, endIndex);
-  
+
   if (startIndex > 0) result = '...' + result;
   if (endIndex < quoteText.length) result = result + '...';
-  
+
   return result;
 }
 
@@ -425,28 +425,30 @@ function highlightTimeString(quoteText, timeString) {
  */
 async function updateQuote() {
   const matchedQuote = await findQuoteForCurrentTime();
-  
+
   const quoteElement = document.querySelector(config.selectors.quote);
   const authorElement = document.querySelector(config.selectors.author);
-  
+
   if (!quoteElement || !authorElement) {
     console.error('Quote or author element not found');
     return;
   }
-  
+
   // Update datetime display
   await updateDateTimeDisplay();
-  
+
   // Fade out
   quoteElement.style.opacity = '0';
   authorElement.style.opacity = '0';
-  
+
   setTimeout(async () => {
+    let textLength = 50;
+
     if (!matchedQuote) {
       // No quote found for this time - get current time for display
       const { hours, minutes } = await getCurrentTime();
       const timeString = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-      
+
       quoteElement.innerHTML = `"${config.messages.noQuote} <strong>${timeString}</strong>..."`;
       authorElement.textContent = config.messages.noSource;
       console.warn('No quote found for current time:', timeString);
@@ -456,12 +458,12 @@ async function updateQuote() {
       const highlightedQuote = highlightTimeString(truncatedQuote, matchedQuote.timeString);
       quoteElement.innerHTML = `"${highlightedQuote}"`;
       authorElement.textContent = `${matchedQuote.title} – ${matchedQuote.author}`;
+      textLength = highlightedQuote.replace(/<[^>]*>/g, '').length;
     }
-    
+
     // Adjust font size
-    const textLength = matchedQuote ? matchedQuote.quote.length : 50;
     adjustFontSizeForQuote(textLength);
-    
+
     // Fade in
     quoteElement.style.opacity = '1';
     authorElement.style.opacity = '1';
@@ -491,15 +493,15 @@ async function setupWakeLock() {
     console.log('Wake Lock API not supported');
     return;
   }
-  
+
   try {
     wakeLock = await navigator.wakeLock.request('screen');
     console.log('Wake Lock active');
-    
+
     wakeLock.addEventListener('release', () => {
       console.log('Wake Lock released');
     });
-    
+
     // Reacquire wake lock when page becomes visible
     document.addEventListener('visibilitychange', async () => {
       if (document.visibilityState === 'visible' && wakeLock !== null) {
@@ -531,7 +533,7 @@ function setupFallbackKeepAwake() {
  */
 function applyEReaderStyles() {
   const isEReader = /\b(Kindle|NOOK|Kobo|Sony Reader)\b/i.test(navigator.userAgent);
-  
+
   if (isEReader) {
     // Keep dark theme consistent across all devices
     document.body.style.backgroundColor = '#1a1a1a';
