@@ -15,14 +15,14 @@ export const config = {
   fontSize: {
     base: 5.5,                // Base font size in vw
     portraitMultiplier: 1.5,  // Multiplier for portrait orientation
-    shortQuoteThreshold: 100, // Character count for "short" quotes
+    shortQuoteThreshold: 80, // Character count for "short" quotes
     longQuoteThreshold: 250,  // Character count for "long" quotes
     shortQuoteSize: 7,        // Font size for short quotes (vw)
     longQuoteSize: 4          // Font size for long quotes (vw)
   },
   
   // Quote truncation
-  maxQuoteLength: 120,        // Maximum characters for 3-line display
+  maxQuoteLength: 108,        // Maximum characters for 3-line display
   
   // Location settings
   location: {
