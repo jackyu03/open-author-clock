@@ -19,7 +19,7 @@ export const config = {
     longQuoteThreshold: 65,  // Character count for "long" quotes
     shortQuoteSize: 7,        // Font size for short quotes (vw)
     longQuoteSize: 5.5,       // Font size for long quotes (vw)
-    weatherMultiplier: 1.3    // Weather text size multiplier (relative to author size)
+    weatherMultiplier: 1.1    // Weather text size multiplier (relative to author size)
   },
 
   // Text alignment
